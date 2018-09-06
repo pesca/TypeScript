@@ -956,7 +956,6 @@ namespace FourSlash {
             });
         }
 
-        //kill
         public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
             this.verifyCompletions({
                 marker: markerName,
