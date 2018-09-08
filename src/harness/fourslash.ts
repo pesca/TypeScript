@@ -751,97 +751,6 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListCount(expectedCount: number, negative: boolean) {
-            if (expectedCount === 0 && negative) {
-                this.verifyCompletionListIsEmpty(/*negative*/ false);
-                return;
-            }
-
-            const members = this.getCompletionListAtCaret();
-
-            if (members) {
-                const match = members.entries.length === expectedCount;
-
-                if ((!match && !negative) || (match && negative)) {
-                    this.raiseError("Member list count was " + members.entries.length + ". Expected " + expectedCount);
-                }
-            }
-            else if (expectedCount) {
-                this.raiseError("Member list count was 0. Expected " + expectedCount);
-            }
-        }
-
-        public verifyCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
-            const completions = this.getCompletionListAtCaret();
-            const itemsCount = completions ? completions.entries.length : 0;
-
-            if (negative) {
-                if (itemsCount > count) {
-                    this.raiseError(`Expected completion list items count to not be greater than ${count}, but is actually ${itemsCount}`);
-                }
-            }
-            else {
-                if (itemsCount <= count) {
-                    this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
-                }
-            }
-        }
-
-        public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
-            if (items.length === 0) {
-                return;
-            }
-
-            const entries = this.getCompletionListAtCaret()!.entries;
-            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
-            ts.zipWith(entries, items, (entry, item) => {
-                assert.equal(entry.name, item, `Unexpected item in completion list`);
-            });
-        }
-
-        public noItemsWithSameNameButDifferentKind(): void {
-            const completions = this.getCompletionListAtCaret()!;
-            const uniqueItems = ts.createMap<string>();
-            for (const item of completions.entries) {
-                const uniqueItem = uniqueItems.get(item.name);
-                if (!uniqueItem) {
-                    uniqueItems.set(item.name, item.kind);
-                }
-                else {
-                    assert.equal(item.kind, uniqueItem, `Items should have the same kind, got ${item.kind} and ${uniqueItem}`);
-                }
-            }
-        }
-
-        public verifyCompletionListIsEmpty(negative: boolean) {
-            const completions = this.getCompletionListAtCaret();
-            if ((!completions || completions.entries.length === 0) && negative) {
-                this.raiseError("Completion list is empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition);
-            }
-            else if (completions && completions.entries.length !== 0 && !negative) {
-                this.raiseError(`Completion list is not empty at caret at position ${this.activeFile.fileName} ${this.currentCaretPosition}\n` +
-                    `Completion List contains: ${stringify(completions.entries.map(e => e.name))}`);
-            }
-        }
-
-        public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
-            const completions = this.getCompletionListAtCaret();
-
-            if ((completions && !completions.isNewIdentifierLocation) && !negative) {
-                this.raiseError("Expected builder completion entry");
-            }
-            else if ((completions && completions.isNewIdentifierLocation) && negative) {
-                this.raiseError("Un-expected builder completion entry");
-            }
-        }
-
-        public verifyCompletionListIsGlobal(expected: boolean) {
-            const completions = this.getCompletionListAtCaret();
-            if (completions && completions.isGlobalCompletion !== expected) {
-                this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
-            }
-        }
-
         public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
             if (options.marker === undefined) {
                 this.verifyCompletionsWorker(options);
@@ -953,16 +862,6 @@ namespace FourSlash {
                     this.raiseError(`Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
-            });
-        }
-
-        public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
-            this.verifyCompletions({
-                marker: markerName,
-                exact: expected,
-                isNewIdentifierLocation: options && options.isNewIdentifierLocation,
-                preferences: options,
-                triggerCharacter: options && options.triggerCharacter,
             });
         }
 
@@ -1185,6 +1084,7 @@ Actual: ${stringify(fullActual)}`);
                 TestState.getDisplayPartsJson(expected), this.messageAtLastKnownMarker("referenced symbol definition display parts"));
         }
 
+        //kill?
         private getCompletionListAtCaret(options?: ts.GetCompletionsAtPositionOptions): ts.CompletionInfo | undefined {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
@@ -3870,30 +3770,8 @@ namespace FourSlashInterface {
             }
         }
 
-        public completionListCount(expectedCount: number) {
-            this.state.verifyCompletionListCount(expectedCount, this.negative);
-        }
-
-        // Verifies the completion list items count to be greater than the specified amount. The
-        // completion list is brought up if necessary
-        public completionListItemsCountIsGreaterThan(count: number) {
-            this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
-        }
-
         public assertHasRanges(ranges: FourSlash.Range[]) {
             assert(ranges.length !== 0, "Array of ranges is expected to be non-empty");
-        }
-
-        public completionListIsEmpty() {
-            this.state.verifyCompletionListIsEmpty(this.negative);
-        }
-
-        public completionListIsGlobal(expected: boolean) {
-            this.state.verifyCompletionListIsGlobal(expected);
-        }
-
-        public completionListAllowsNewIdentifier() {
-            this.state.verifyCompletionListAllowsNewIdentifier(this.negative);
         }
 
         public noSignatureHelp(...markers: string[]): void {
@@ -3980,10 +3858,6 @@ namespace FourSlashInterface {
     export class Verify extends VerifyNegatable {
         constructor(state: FourSlash.TestState) {
             super(state);
-        }
-
-        public completionsAt(markerName: ArrayOrSingle<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
-            this.state.verifyCompletionsAt(markerName, completions, options);
         }
 
         public completions(...optionsArray: VerifyCompletionsOptions[]) {
@@ -4653,10 +4527,6 @@ namespace FourSlashInterface {
         readonly sourceDisplay?: string;
         readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
     };
-    export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
-        triggerCharacter?: ts.CompletionsTriggerCharacter;
-        isNewIdentifierLocation?: boolean;
-    }
 
     export interface VerifyCompletionsOptions {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;

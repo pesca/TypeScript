@@ -146,10 +146,6 @@ declare namespace FourSlashInterface {
         allowedClassElementKeywords: string[];
         allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
-        completionListCount(expectedCount: number): void;
-        completionListItemsCountIsGreaterThan(count: number): void;
-        completionListIsEmpty(): void;
-        completionListAllowsNewIdentifier(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
@@ -185,7 +181,6 @@ declare namespace FourSlashInterface {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completions(...options: CompletionsOptions[]): void;
-        completionsAt(markerName: ArrayOrSingle<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions): void;
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
@@ -509,10 +504,6 @@ declare namespace FourSlashInterface {
         readonly includeInsertTextCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
-    }
-    interface CompletionsAtOptions extends UserPreferences {
-        triggerCharacter?: string;
-        isNewIdentifierLocation?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>,
