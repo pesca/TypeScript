@@ -326,7 +326,11 @@ verifyGeneral('class', {
 });
 
 // from interface in mod1
-verify.completionsAt("interface", ["readonly"], { isNewIdentifierLocation: true });
+verify.completions({
+    marker: "interface",
+    exact: "readonly",
+    isNewIdentifierLocation: true,
+});
 
 // from namespace in mod1
 verifyNamespaceInMod1('namespace');
