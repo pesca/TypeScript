@@ -4496,6 +4496,115 @@ namespace FourSlashInterface {
 
         export const statementKeywords: ReadonlyArray<string> = statementKeywordsWithTypes.filter(k =>
             k === "false" || k === "true" || k === "null" || k === "void" || !ts.contains(typeKeywords, k) && k !== "declare" && k !== "module");
+
+        export const globalsVars: ReadonlyArray<string> = [
+            "eval",
+            "parseInt",
+            "parseFloat",
+            "isNaN",
+            "isFinite",
+            "decodeURI",
+            "decodeURIComponent",
+            "encodeURI",
+            "encodeURIComponent",
+            "escape",
+            "unescape",
+            "NaN",
+            "Infinity",
+            "Object",
+            "Function",
+            "String",
+            "Boolean",
+            "Number",
+            "Math",
+            "Date",
+            "RegExp",
+            "Error",
+            "EvalError",
+            "RangeError",
+            "ReferenceError",
+            "SyntaxError",
+            "TypeError",
+            "URIError",
+            "JSON",
+            "Array",
+            "ArrayBuffer",
+            "DataView",
+            "Int8Array",
+            "Uint8Array",
+            "Uint8ClampedArray",
+            "Int16Array",
+            "Uint16Array",
+            "Int32Array",
+            "Uint32Array",
+            "Float32Array",
+            "Float64Array",
+            "Intl",
+        ];
+
+        //dup?
+        export const globalKeywords: ReadonlyArray<string> = [
+            "undefined",
+            "break",
+            "case",
+            "catch",
+            "class",
+            "const",
+            "continue",
+            "debugger",
+            "default",
+            "delete",
+            "do",
+            "else",
+            "enum",
+            "export",
+            "extends",
+            "false",
+            "finally",
+            "for",
+            "function",
+            "if",
+            "import",
+            "in",
+            "instanceof",
+            "new",
+            "null",
+            "return",
+            "super",
+            "switch",
+            "this",
+            "throw",
+            "true",
+            "try",
+            "typeof",
+            "var",
+            "void",
+            "while",
+            "with",
+            "implements",
+            "interface",
+            "let",
+            "package",
+            "yield",
+            "any",
+            "async",
+            "boolean",
+            "declare",
+            "keyof",
+            "module",
+            "never",
+            "number",
+            "object",
+            "string",
+            "symbol",
+            "unique",
+            "unknown",
+        ];
+
+        export const globals: ReadonlyArray<string> = [...globalsVars, ...globalKeywords];
+
+        export const globalsPlus = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> =>
+            [...globalsVars, ...plus, ...globalKeywords];
     }
 
     export interface ReferenceGroup {
@@ -4523,7 +4632,6 @@ namespace FourSlashInterface {
         readonly kindModifiers?: string;
         readonly text?: string;
         readonly documentation?: string;
-        readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
         readonly sourceDisplay?: string;
         readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
     };

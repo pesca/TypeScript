@@ -21,4 +21,4 @@
 //// foo;
 //// var v10 = /reg/*inRegExp1*/ex/;
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+verify.completions({ marker: test.markers(), exact: undefined });
