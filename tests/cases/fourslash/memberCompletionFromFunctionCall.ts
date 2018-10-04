@@ -8,5 +8,4 @@
 
 goTo.marker();
 edit.insert(".");
-verify.not.completionListIsEmpty();
 verify.completions({ exact: "text" });

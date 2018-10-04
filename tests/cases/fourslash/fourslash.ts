@@ -508,6 +508,7 @@ declare namespace FourSlashInterface {
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>,
         readonly isNewIdentifierLocation?: boolean;
+        readonly isGlobalCompletion?: boolean;
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string | { name: string, source: string }>;
@@ -526,19 +527,11 @@ declare namespace FourSlashInterface {
         readonly kindModifiers?: string;
 
         // details
-<<<<<<< 5f2741b2ba5251f2fb131c540c85606ad6038232
-        readonly text?: string,
-        readonly documentation?: string,
-        readonly tags?: ReadonlyArray<JSDocTagInfo>;
-        readonly sourceDisplay?: string,
-    };
-=======
         readonly text?: string;
         readonly documentation?: string;
         readonly tags?: ReadonlyArray<JSDocTagInfo>;
         readonly sourceDisplay?: string;
     }
->>>>>>> wip
 
     interface VerifySignatureHelpOptions {
         marker?: ArrayOrSingle<string>;
@@ -660,6 +653,7 @@ declare namespace completion {
     export const classElementKeywords: ReadonlyArray<string>;
     export const constructorParameterKeywords: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export const functionMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const stringMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export const functionMembersWithPrototype: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export const statementKeywordsWithTypes: ReadonlyArray<string>;
     export const statementKeywords: ReadonlyArray<string>;

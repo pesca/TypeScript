@@ -774,6 +774,11 @@ namespace FourSlash {
                 this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation || false}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
+            //TODO: always test?
+            if ("isGlobalCompletion" in options && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
+                this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
+            }
+
             const nameToEntries = ts.createMap<ts.CompletionEntry[]>();
             for (const entry of actualCompletions.entries) {
                 const entries = nameToEntries.get(entry.name);
@@ -4589,6 +4594,30 @@ namespace FourSlashInterface {
             "caller"
         ];
 
+        export const stringMembers: ReadonlyArray<ExpectedCompletionEntry> = [
+            "toString",
+            "charAt",
+            "charCodeAt",
+            "concat",
+            "indexOf",
+            "lastIndexOf",
+            "localeCompare",
+            "match",
+            "replace",
+            "search",
+            "slice",
+            "split",
+            "substring",
+            "toLowerCase",
+            "toLocaleLowerCase",
+            "toUpperCase",
+            "toLocaleUpperCase",
+            "trim",
+            "length",
+            "substr",
+            "valueOf",
+        ];
+
         export const functionMembersWithPrototype: ReadonlyArray<ExpectedCompletionEntry> = [
             ...functionMembers.slice(0, 4),
             "prototype",
@@ -4745,7 +4774,8 @@ namespace FourSlashInterface {
 
     export interface VerifyCompletionsOptions {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
-        readonly isNewIdentifierLocation?: boolean;
+        readonly isNewIdentifierLocation?: boolean; //always tested
+        readonly isGlobalCompletion?: boolean; //only tested if set
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
