@@ -4467,6 +4467,112 @@ namespace FourSlashInterface {
         export const typeKeywords: ReadonlyArray<string> = //keywords like below
             ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown"];
 
+        const globalTypeDecls = [
+            "Symbol",
+            "PropertyKey",
+            "PropertyDescriptor",
+            "PropertyDescriptorMap",
+            "Object",
+            "ObjectConstructor",
+            "Function",
+            "FunctionConstructor",
+            "CallableFunction",
+            "NewableFunction",
+            "IArguments",
+            "String",
+            "StringConstructor",
+            "Boolean",
+            "BooleanConstructor",
+            "Number",
+            "NumberConstructor",
+            "TemplateStringsArray",
+            "ImportMeta",
+            "Math",
+            "Date",
+            "DateConstructor",
+            "RegExpMatchArray",
+            "RegExpExecArray",
+            "RegExp",
+            "RegExpConstructor",
+            "Error",
+            "ErrorConstructor",
+            "EvalError",
+            "EvalErrorConstructor",
+            "RangeError",
+            "RangeErrorConstructor",
+            "ReferenceError",
+            "ReferenceErrorConstructor",
+            "SyntaxError",
+            "SyntaxErrorConstructor",
+            "TypeError",
+            "TypeErrorConstructor",
+            "URIError",
+            "URIErrorConstructor",
+            "JSON",
+            "ReadonlyArray",
+            "ConcatArray",
+            "Array",
+            "ArrayConstructor",
+            "TypedPropertyDescriptor",
+            "ClassDecorator",
+            "PropertyDecorator",
+            "MethodDecorator",
+            "ParameterDecorator",
+            "PromiseConstructorLike",
+            "PromiseLike",
+            "Promise",
+            "ArrayLike",
+            "Partial",
+            "Required",
+            "Readonly",
+            "Pick",
+            "Record",
+            "Exclude",
+            "Extract",
+            "NonNullable",
+            "Parameters",
+            "ConstructorParameters",
+            "ReturnType",
+            "InstanceType",
+            "ThisType",
+            "ArrayBuffer",
+            "ArrayBufferTypes",
+            "ArrayBufferLike",
+            "ArrayBufferConstructor",
+            "ArrayBufferView",
+            "DataView",
+            "DataViewConstructor",
+            "Int8Array",
+            "Int8ArrayConstructor",
+            "Uint8Array",
+            "Uint8ArrayConstructor",
+            "Uint8ClampedArray",
+            "Uint8ClampedArrayConstructor",
+            "Int16Array",
+            "Int16ArrayConstructor",
+            "Uint16Array",
+            "Uint16ArrayConstructor",
+            "Int32Array",
+            "Int32ArrayConstructor",
+            "Uint32Array",
+            "Uint32ArrayConstructor",
+            "Float32Array",
+            "Float32ArrayConstructor",
+            "Float64Array",
+            "Float64ArrayConstructor",
+            "Intl",
+        ];
+
+        export const globalTypes = globalTypesPlus([]);
+
+        export function globalTypesPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+            return [
+                ...globalTypeDecls,
+                ...plus,
+                ...typeKeywords,
+            ];
+        }
+
         export const classElementKeywords: ReadonlyArray<string> = //keywords like below
             ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"];
 
@@ -4603,8 +4709,9 @@ namespace FourSlashInterface {
 
         export const globals: ReadonlyArray<string> = [...globalsVars, ...globalKeywords];
 
-        export const globalsPlus = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> =>
-            [...globalsVars, ...plus, ...globalKeywords];
+        export function globalsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+            return [...globalsVars, ...plus, ...globalKeywords];
+        }
     }
 
     export interface ReferenceGroup {
