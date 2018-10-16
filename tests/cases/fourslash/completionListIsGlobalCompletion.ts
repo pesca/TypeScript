@@ -37,11 +37,10 @@
 
 verify.completions(
     { marker: ["1"], exact: undefined, isGlobalCompletion: false },
+    { marker: "2", exact: ["a.ts", "file.ts"], isGlobalCompletion: false, isNewIdentifierLocation: true },
 );
 //TODO:MORE
 
-goTo.marker("2");
-verify.completionListIsGlobal(false);
 goTo.marker("3");
 verify.completionListIsGlobal(false);
 goTo.marker("4");
